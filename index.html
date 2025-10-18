@@ -1,14 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Voice-based Meeting Assistant</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Meeting Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-microphone-alt"></i>
+                <h1>AI Meeting Assistant</h1>
+            </div>
+            <nav class="nav">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Transform Your Meetings with AI</h2>
+                <p>Record, transcribe, and summarize your meetings automatically. Get instant bullet points and downloadable transcripts.</p>
+                <button id="startMeeting" class="cta-button">
+                    <i class="fas fa-play"></i>
+                    Start Meeting Assistant
+                </button>
+            </div>
+            <div class="hero-image">
+                <div class="meeting-illustration">
+                    <i class="fas fa-users"></i>
+                    <i class="fas fa-microphone"></i>
+                    <i class="fas fa-brain"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <h3>Key Features</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-microphone"></i>
+                    <h4>Voice Recording</h4>
+                    <p>High-quality audio recording using Web Speech API</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>Live Transcription</h4>
+                    <p>Real-time speech-to-text conversion</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-list-ul"></i>
+                    <h4>Smart Summarization</h4>
+                    <p>AI-powered bullet points and key insights</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-download"></i>
+                    <h4>Export Options</h4>
+                    <p>Download transcripts and summaries in multiple formats</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meeting Assistant Interface (Hidden initially) -->
+        <section id="meetingInterface" class="meeting-interface hidden">
+            <div class="meeting-header">
+                <h3>Meeting Assistant Active</h3>
+                <div class="recording-status">
+                    <div id="recordingIndicator" class="recording-indicator"></div>
+                    <span id="recordingText">Ready to Record</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="recordBtn" class="control-btn record-btn">
+                    <i class="fas fa-microphone"></i>
+                    Start Recording
+                </button>
+                <button id="stopBtn" class="control-btn stop-btn" disabled>
+                    <i class="fas fa-stop"></i>
+                    Stop Recording
+                </button>
+                <button id="pauseBtn" class="control-btn pause-btn" disabled>
+                    <i class="fas fa-pause"></i>
+                    Pause
+                </button>
+            </div>
+
+            <div class="content-area">
+                <div class="transcript-section">
+                    <h4>Live Transcript</h4>
+                    <div id="transcript" class="transcript-content">
+                        <p class="placeholder">Your meeting transcript will appear here...</p>
+                    </div>
+                </div>
+
+                <div class="summary-section">
+                    <h4>AI Summary</h4>
+                    <div id="summary" class="summary-content">
+                        <p class="placeholder">AI-generated summary will appear here...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chat Assistant -->
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h4><i class="fas fa-robot"></i> AI Meeting Assistant</h4>
+                    <p class="chat-subtitle">Ask me anything about your meeting</p>
+                </div>
+                
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="welcome-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <p>👋 Hi! I'm your AI meeting assistant. I can help you understand your meeting content, answer questions about decisions, action items, and provide insights. What would you like to know?</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="chatInput" placeholder="Ask me about your meeting..." />
+                            <button id="sendMessage" class="send-btn" disabled>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="chat-suggestions">
+                            <button class="suggestion-btn" data-question="What were the key decisions made?">
+                                <i class="fas fa-gavel"></i> Key Decisions
+                            </button>
+                            <button class="suggestion-btn" data-question="What are the action items?">
+                                <i class="fas fa-tasks"></i> Action Items
+                            </button>
+                            <button class="suggestion-btn" data-question="What was the budget discussion?">
+                                <i class="fas fa-dollar-sign"></i> Budget Info
+                            </button>
+                            <button class="suggestion-btn" data-question="Give me a summary">
+                                <i class="fas fa-file-alt"></i> Summary
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="export-section">
+                <button id="downloadTranscript" class="export-btn" disabled>
+                    <i class="fas fa-download"></i>
+                    Download Transcript
+                </button>
+                <button id="downloadSummary" class="export-btn" disabled>
+                    <i class="fas fa-download"></i>
+                    Download Summary
+                </button>
+            </div>
+
+            <button id="backToHome" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </button>
+        </section>
+
+        <!-- How it Works Section -->
+        <section id="how-it-works" class="how-it-works">
+            <h3>How It Works</h3>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Start Recording</h4>
+                    <p>Click the record button to begin capturing audio from your microphone</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Live Transcription</h4>
+                    <p>Watch as your speech is converted to text in real-time</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>AI Analysis</h4>
+                    <p>Our AI processes the content to generate key points and summaries</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Export Results</h4>
+                    <p>Download your transcript and summary for future reference</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="contact" class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>AI Meeting Assistant</h4>
+                    <p>Making meetings more productive with AI</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>support@aimeetingassistant.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AI Meeting Assistant. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>
-
-

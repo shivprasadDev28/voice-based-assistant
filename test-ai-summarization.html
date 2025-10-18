@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Summarization Test - Original Insights</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .original-text {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .ai-insights {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .insight-item {
+            background: #fff;
+            padding: 10px;
+            margin: 8px 0;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Summarization Test - Original Insights</h1>
+        <p>This test demonstrates how the AI now generates <strong>original insights</strong> instead of copying sentences from the transcript.</p>
+        
+        <div class="test-section">
+            <h3>Test 1: Business Meeting</h3>
+            <div class="original-text">
+                <strong>Original Transcript:</strong><br>
+                "Today we discussed the quarterly budget review. We need to increase our marketing budget by 25% to reach our target of $2M revenue this quarter. John will be responsible for updating the marketing strategy by next Friday. We also decided to hire two new developers for the mobile app project. The deadline for the app launch is March 15th. Sarah mentioned that customer satisfaction has improved by 15% this month. We agreed to implement the new customer feedback system by the end of February."
+            </div>
+            <button onclick="testAI('business')">Generate AI Summary</button>
+            <div id="business-result" class="ai-insights" style="display: none;">
+                <h4>AI-Generated Insights (Not Copied Sentences):</h4>
+                <div id="business-insights"></div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 2: Technical Meeting</h3>
+            <div class="original-text">
+                <strong>Original Transcript:</strong><br>
+                "We had a technical review meeting about the new API implementation. The main issue is that the authentication system is causing 15% performance degradation. We need to optimize the database queries to reduce response time from 2.5 seconds to under 1 second. Mike will investigate the caching mechanism and implement Redis by next week. We also discovered a critical security vulnerability in the payment processing module that needs immediate attention."
+            </div>
+            <button onclick="testAI('technical')">Generate AI Summary</button>
+            <div id="technical-result" class="ai-insights" style="display: none;">
+                <h4>AI-Generated Insights (Not Copied Sentences):</h4>
+                <div id="technical-insights"></div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Test 3: General Team Meeting</h3>
+            <div class="original-text">
+                <strong>Original Transcript:</strong><br>
+                "This was our weekly team standup meeting. Everyone reported good progress on their current projects. The main topic was the upcoming company retreat scheduled for next month. We need to finalize the venue and send out invitations by Friday. The budget for the retreat is $5,000 and we have 25 people attending. Sarah will handle the catering arrangements. We also discussed the new remote work policy - employees can work from home up to 3 days per week."
+            </div>
+            <button onclick="testAI('general')">Generate AI Summary</button>
+            <div id="general-result" class="ai-insights" style="display: none;">
+                <h4>AI-Generated Insights (Not Copied Sentences):</h4>
+                <div id="general-insights"></div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🎯 Key Improvements</h2>
+            <ul>
+                <li><span class="highlight">No More Sentence Copying:</span> AI generates original insights based on understanding</li>
+                <li><span class="highlight">Context-Aware Analysis:</span> Understands meeting type and generates relevant insights</li>
+                <li><span class="highlight">Professional Language:</span> Uses business-appropriate terminology and structure</li>
+                <li><span class="highlight">Intelligent Interpretation:</span> Analyzes patterns and generates meaningful summaries</li>
+                <li><span class="highlight">Actionable Insights:</span> Provides useful information for decision-making</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const testTranscripts = {
+            business: "Today we discussed the quarterly budget review. We need to increase our marketing budget by 25% to reach our target of $2M revenue this quarter. John will be responsible for updating the marketing strategy by next Friday. We also decided to hire two new developers for the mobile app project. The deadline for the app launch is March 15th. Sarah mentioned that customer satisfaction has improved by 15% this month. We agreed to implement the new customer feedback system by the end of February.",
+            
+            technical: "We had a technical review meeting about the new API implementation. The main issue is that the authentication system is causing 15% performance degradation. We need to optimize the database queries to reduce response time from 2.5 seconds to under 1 second. Mike will investigate the caching mechanism and implement Redis by next week. We also discovered a critical security vulnerability in the payment processing module that needs immediate attention.",
+            
+            general: "This was our weekly team standup meeting. Everyone reported good progress on their current projects. The main topic was the upcoming company retreat scheduled for next month. We need to finalize the venue and send out invitations by Friday. The budget for the retreat is $5,000 and we have 25 people attending. Sarah will handle the catering arrangements. We also discussed the new remote work policy - employees can work from home up to 3 days per week."
+        };
+
+        async function testAI(meetingType) {
+            const transcript = testTranscripts[meetingType];
+            const resultDiv = document.getElementById(`${meetingType}-result`);
+            const insightsDiv = document.getElementById(`${meetingType}-insights`);
+            
+            insightsDiv.innerHTML = '<p>🤖 AI is analyzing and generating original insights...</p>';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/summarize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        transcript: transcript,
+                        meetingType: meetingType
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate summary');
+                }
+                
+                const data = await response.json();
+                const summary = data.summary;
+                
+                displayAIInsights(insightsDiv, summary);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                insightsDiv.innerHTML = '<p style="color: red;">Error generating AI insights. Please try again.</p>';
+            }
+        }
+        
+        function displayAIInsights(container, summary) {
+            let html = '';
+            
+            // AI-Generated Key Discussion Points (not copied sentences)
+            if (summary.bulletPoints && summary.bulletPoints.length > 0) {
+                html += '<h5>🧠 AI-Generated Key Discussion Points:</h5>';
+                html += '<div class="insight-item">';
+                summary.bulletPoints.forEach(point => {
+                    html += `<div style="margin: 8px 0; padding: 8px; background: #f0f8ff; border-radius: 4px;">• ${point}</div>`;
+                });
+                html += '</div>';
+            }
+            
+            // AI Insights
+            if (summary.insights && summary.insights.length > 0) {
+                html += '<h5>💡 AI Analysis & Insights:</h5>';
+                html += '<div class="insight-item">';
+                summary.insights.forEach(insight => {
+                    html += `<div style="margin: 8px 0; padding: 8px; background: #f0fff0; border-radius: 4px;">• ${insight}</div>`;
+                });
+                html += '</div>';
+            }
+            
+            // Action Items (reformulated)
+            if (summary.actionItems && summary.actionItems.length > 0) {
+                html += '<h5>✅ AI-Formulated Action Items:</h5>';
+                html += '<div class="insight-item">';
+                summary.actionItems.forEach(item => {
+                    html += `<div style="margin: 8px 0; padding: 8px; background: #fff3e0; border-radius: 4px;">• ${item}</div>`;
+                });
+                html += '</div>';
+            }
+            
+            // Decisions (reformulated)
+            if (summary.decisions && summary.decisions.length > 0) {
+                html += '<h5>⚖️ AI-Interpreted Decisions:</h5>';
+                html += '<div class="insight-item">';
+                summary.decisions.forEach(decision => {
+                    html += `<div style="margin: 8px 0; padding: 8px; background: #f3e5f5; border-radius: 4px;">• ${decision}</div>`;
+                });
+                html += '</div>';
+            }
+            
+            container.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

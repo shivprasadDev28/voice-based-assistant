@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Summarization Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        .section {
+            margin: 15px 0;
+        }
+        .section h4 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        .topic-tag {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 2px;
+            display: inline-block;
+        }
+        .insight-item, .action-item, .decision-item {
+            background: #e6fffa;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #38b2ac;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Meeting Summarization Test</h1>
+        <p>Test the enhanced AI summarization with sample meeting content:</p>
+        
+        <textarea id="transcript" placeholder="Enter meeting transcript here...">Today we discussed the quarterly budget review. We need to increase our marketing budget by 25% to reach our target of $2M revenue this quarter. John will be responsible for updating the marketing strategy by next Friday. We also decided to hire two new developers for the mobile app project. The deadline for the app launch is March 15th. Sarah mentioned that customer satisfaction has improved by 15% this month. We agreed to implement the new customer feedback system by the end of February. The main challenge is finding qualified developers quickly. We should also consider outsourcing some development work. Overall, the team is optimistic about meeting our goals this quarter.</textarea>
+        
+        <button onclick="testSummarization()">Generate AI Summary</button>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>AI-Generated Summary</h3>
+            <div id="summaryContent"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testSummarization() {
+            const transcript = document.getElementById('transcript').value;
+            const resultDiv = document.getElementById('result');
+            const summaryContent = document.getElementById('summaryContent');
+            
+            if (!transcript.trim()) {
+                alert('Please enter some meeting content to summarize.');
+                return;
+            }
+            
+            summaryContent.innerHTML = '<p>🤖 AI is analyzing your meeting content...</p>';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const response = await fetch('/api/summarize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        transcript: transcript,
+                        meetingType: 'business'
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to generate summary');
+                }
+                
+                const data = await response.json();
+                const summary = data.summary;
+                
+                displaySummary(summary);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                summaryContent.innerHTML = '<p style="color: red;">Error generating summary. Please try again.</p>';
+            }
+        }
+        
+        function displaySummary(summary) {
+            let html = '';
+            
+            // Key Topics
+            if (summary.keyTopics && summary.keyTopics.length > 0) {
+                html += '<div class="section">';
+                html += '<h4>🏷️ Key Topics</h4>';
+                html += '<div>';
+                summary.keyTopics.forEach(topic => {
+                    html += `<span class="topic-tag">${topic}</span>`;
+                });
+                html += '</div></div>';
+            }
+            
+            // AI Insights
+            if (summary.insights && summary.insights.length > 0) {
+                html += '<div class="section">';
+                html += '<h4>💡 AI Insights</h4>';
+                html += '<ul>';
+                summary.insights.forEach(insight => {
+                    html += `<li class="insight-item">${insight}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Key Discussion Points
+            if (summary.bulletPoints && summary.bulletPoints.length > 0) {
+                html += '<div class="section">';
+                html += '<h4>📝 Key Discussion Points</h4>';
+                html += '<ul>';
+                summary.bulletPoints.forEach(point => {
+                    html += `<li>${point}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Decisions Made
+            if (summary.decisions && summary.decisions.length > 0) {
+                html += '<div class="section">';
+                html += '<h4>⚖️ Decisions Made</h4>';
+                html += '<ul>';
+                summary.decisions.forEach(decision => {
+                    html += `<li class="decision-item">${decision}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Action Items
+            if (summary.actionItems && summary.actionItems.length > 0) {
+                html += '<div class="section">';
+                html += '<h4>✅ Action Items</h4>';
+                html += '<ul>';
+                summary.actionItems.forEach(item => {
+                    html += `<li class="action-item">${item}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Key Metrics
+            if (summary.metrics && summary.metrics.length > 0) {
+                html += '<div class="section">';
+                html += '<h4>📊 Key Metrics</h4>';
+                html += '<ul>';
+                summary.metrics.forEach(metric => {
+                    html += `<li>${metric}</li>`;
+                });
+                html += '</ul></div>';
+            }
+            
+            // Meeting Statistics
+            html += '<div class="section">';
+            html += '<h4>📈 Meeting Statistics</h4>';
+            html += `<p><strong>Duration:</strong> ${summary.meetingDuration || 'Unknown'}</p>`;
+            html += `<p><strong>Words:</strong> ${summary.wordCount || 0}</p>`;
+            html += `<p><strong>Sentences:</strong> ${summary.sentenceCount || 0}</p>`;
+            html += '</div>';
+            
+            document.getElementById('summaryContent').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
